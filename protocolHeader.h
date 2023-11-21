@@ -18,6 +18,19 @@ struct arpHeader{
     uint8_t dip[4] = {0,}; //scanning target IP
 } __attribute__ ((__packed__));
 
+struct tcpHeader{
+    uint16_t source_port;      // 송신자의 포트 번호
+    uint16_t dest_port;        // 수신자의 포트 번호
+    uint32_t sequence_number;  // 연속된 데이터 스트림에서의 순서 번호
+    uint32_t ack_number;       // 확인 응답 번호
+    uint16_t data_offset_reserved_flags;  // 데이터 오프셋 및 플래그
+    uint16_t window_size;      // 수신자 창 크기
+    uint16_t checksum;         // 헤더 및 데이터에 대한 체크섬
+    uint16_t urgent_pointer;   // 긴급 데이터의 포인터
+    // 다른 필요한 필드들을 추가할 수 있습니다.
+}__attribute__ ((__packed__));
+
+
 struct dhcpHeader{
     uint8_t op;             // 메시지 종류 (부팅 요청, 부팅 응답 등)
     uint8_t htype;          // 하드웨어 주소 타입
@@ -37,6 +50,15 @@ struct dhcpHeader{
     uint8_t options[308];   // 옵션
 } __attribute__ ((__packed__));
 
+struct tlsClientHelloHeader{
+    uint8_t  contentType;
+    uint16_t tlsVer;
+    uint16_t tlsLen;
+    uint8_t  handshakeType;
+    uint8_t  handshakeLen[3];
+    uint16_t handshakeVer;
+    uint64_t handshakeRandom[4];
+} __attribute__ ((__packed__));
 
 struct arpPacket{
     struct etherHeader ether;

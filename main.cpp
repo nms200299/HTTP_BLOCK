@@ -65,7 +65,6 @@ int main(int argc, char* argv[]) {
             recvArpRep(packet, ipTable);
             break;
         case ETHERTYPE_IP:
-
             struct ip *iph = (struct ip *)packet;
             packet += sizeof(struct ip);
             uint16_t packetType_4L = iph->ip_p;
@@ -75,6 +74,8 @@ int main(int argc, char* argv[]) {
                 packet += sizeof(struct udphdr);
                 recvDhcp(packet);
                 break;
+            case IPPROTO_TCP:
+                recvTcp(packet);
             }
             break;
         }

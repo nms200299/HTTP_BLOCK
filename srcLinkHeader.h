@@ -12,3 +12,9 @@ void *recvArpRep(const u_char* packet, uint8_t ipTable[256][6]);
 
 // ▼ recvDhcp.cpp
 uint8_t recvDhcp(const u_char* packet);
+
+// ▼ recvTcp.cpp
+void recvTcp(const u_char* packet);
+
+// ▼ recvTls.cpp
+void recvTls(const u_char *packet);

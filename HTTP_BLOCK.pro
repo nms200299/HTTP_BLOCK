@@ -12,7 +12,9 @@ SOURCES += \
         main.cpp \
         myInfo.cpp \
         recvArpRep.cpp \
-        recvDhcp.cpp
+        recvDhcp.cpp \
+        recvTcp.cpp \
+        recvTls.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
