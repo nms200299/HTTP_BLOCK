@@ -2,7 +2,7 @@
 #include <arpa/inet.h> // htons
 #include <pcap.h> // pcap
 
-void *recvArpRep(const u_char* packet, uint8_t ipTable[256][6]){
+void recvArpRep(const u_char* packet, uint8_t ipTable[256][6]){
     struct arpHeader *arpPointer = (struct arpHeader *)packet;
 
     unsigned char *sha = arpPointer->sha;
@@ -21,11 +21,6 @@ void *recvArpRep(const u_char* packet, uint8_t ipTable[256][6]){
         }
 
         if (chkFlag == false){
-            printf("---------------------------------------------------------\n");
-            printf("[ARP Packet : Reply]\n");
-            printf("Source MAC Address : %02x:%02x:%02x:%02x:%02x:%02x\n",sha[0], sha[1], sha[2], sha[3], sha[4], sha[5]);
-            printf("Source IP Address : %d.%d.%d.%d\n",sip[0], sip[1], sip[2], sip[3]);
-
             ipTable[cCls][0] = sha[0];
             ipTable[cCls][1] = sha[1];
             ipTable[cCls][2] = sha[2];

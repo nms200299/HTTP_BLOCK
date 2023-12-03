@@ -9,12 +9,15 @@ LIBS += -lpcap
 
 SOURCES += \
         arpScan.cpp \
+        arpSpoof.cpp \
         main.cpp \
         myInfo.cpp \
         recvArpRep.cpp \
         recvDhcp.cpp \
         recvTcp.cpp \
-        recvTls.cpp
+        recvTls.cpp \
+        sendArpReq.cpp \
+        sendRelay.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

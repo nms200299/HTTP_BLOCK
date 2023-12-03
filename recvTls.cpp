@@ -5,7 +5,6 @@
 
 void recvTls(const u_char *packet){
     tlsClientHelloHeader *tlsH=(tlsClientHelloHeader*)packet;
-
     if (tlsH->handshakeType == TLS_CLIENT_HELLO) {
         packet = packet+sizeof(tlsClientHelloHeader);
         // TLS - Random 필드까지 뛰어넘음.

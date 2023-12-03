@@ -1,20 +1,18 @@
 #pragma once
 #include <stdint.h>
+#include <pcap.h>
 
-// ▼ myInfo.cpp
 void myinfo(uint8_t myMac[6], uint8_t myIp[4]);
 
-// ▼ arpScan.cpp
+
 void *arpScan(void *args);
+void *arpSpoof(void *args);
 
-// ▼ recvArpRep.cpp
-void *recvArpRep(const u_char* packet, uint8_t ipTable[256][6]);
 
-// ▼ recvDhcp.cpp
+void sendArpReq(pcap_t* pcapH, uint8_t (*myMac)[6], uint8_t (*myIp)[4], uint8_t targetIp);
+void sendRelay(pcap_t* pcapH, u_char *packet, bpf_u_int32 caplen, uint8_t (*myMac)[6], uint8_t (*gwMac)[6]);
+
+void recvArpRep(const u_char* packet, uint8_t ipTable[256][6]);
 uint8_t recvDhcp(const u_char* packet);
-
-// ▼ recvTcp.cpp
 void recvTcp(const u_char* packet);
-
-// ▼ recvTls.cpp
 void recvTls(const u_char *packet);
