@@ -4,7 +4,7 @@
 #include <string.h>     // memcpy
 #include <pcap.h>       // pcap
 #include <unistd.h>     // usleep
-#include <stdlib.h> // exit
+#include <stdlib.h>     // exit, system
 #include <netinet/ether.h>
 #include <netinet/ip.h>
 #include <netinet/udp.h>
@@ -27,7 +27,21 @@ int main(int argc, char* argv[]) {
         usage();
         return 0;
     }
+    char* blockDomain[]= {
+        "naver.com",
+        "test.gilgil.net",
+        "joongbu.ac.kr"
+    };
+
+    char blockAlertStr[]= {
+        "<h1>This page is blocked by HTTP_BLOCK ! </h1>\x0d\x0a"
+    };
+
     char *dev = argv[1];
+    char command[100];
+    snprintf(command, sizeof(command), "ifconfig %s mtu 16000", argv[1]);
+    system(command);
+
     uint8_t gatewayIp;
     printf("Gateway IP :");
     scanf("%d", &gatewayIp);
@@ -87,9 +101,19 @@ int main(int argc, char* argv[]) {
                 recvArpRep(packet, ipTable);
                 break;
             case ETHERTYPE_IP:
-                struct ip *iph = (struct ip *)packet;
-                packet += sizeof(struct ip);
+                uint8_t blockFlag=0;
+                struct ip *iph;
+                iph = (struct ip *)packet;
+                // IP 패킷이면 IP 헤더를 구한다.
+//                printf("IP Size : %02X %02X \n", *((uint8_t*)iph), *((uint8_t*)iph+1));
+//                printf("Org CheckSum : %04X \n", htons(iph->ip_sum));
+//                printf("Calc CheckSum : %04X \n", calcIpChksum(iph));
+
+
+                packet += iph->ip_hl*4;
                 uint16_t packetType_4L = iph->ip_p;
+
+
 
                 switch (packetType_4L){
                     case IPPROTO_UDP:
@@ -97,17 +121,24 @@ int main(int argc, char* argv[]) {
                         recvDhcp(packet);
                         break;
                     case IPPROTO_TCP:
-                        recvTcp(packet);
+                        blockFlag = recvTcp(packet, blockDomain);
                         break;
                 }
 
-                if (memcmp(ethh->shost, ipTable[gatewayIp], 6) != 0){
-                    sendRelay(pcap, orgPacket, header->caplen, &myMac, &(ipTable[gatewayIp]));
+                if (blockFlag) {
+                // 패킷 차단
+                        sendTcpClose(pcap, orgPacket, (char *)&blockAlertStr);
                 } else {
-                    sendRelay(pcap, orgPacket, header->caplen, &myMac, &(ipTable[*(((uint8_t*)&(iph->ip_dst))+3)]));
+                // 패킷 릴레이
+                    if (memcmp(ethh->shost, ipTable[gatewayIp], 6) != 0){
+                        // eth->srcMAC != gwMac
+                        sendRelay(pcap, orgPacket, header->caplen, &myMac, &(ipTable[gatewayIp]));
+                        // send to gw
+                    } else {
+                        sendRelay(pcap, orgPacket, header->caplen, &myMac, &(ipTable[*(((uint8_t*)&(iph->ip_dst))+3)]));
+                        // send to ipv4->dstIp
+                    }
                 }
-
-
 
             break;
         }

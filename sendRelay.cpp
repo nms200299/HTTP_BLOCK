@@ -3,10 +3,10 @@
 #include <string.h> // memcpy
 #include <stdlib.h> // exit
 
-void sendRelay(pcap_t* pcapH, u_char *packet, bpf_u_int32 caplen, uint8_t (*myMac)[6], uint8_t (*gwMac)[6]){
+void sendRelay(pcap_t* pcapH, u_char *packet, bpf_u_int32 caplen, uint8_t (*myMac)[6], uint8_t (*dstMac)[6]){
     etherHeader ethh;
     memcpy(ethh.shost, myMac, 6);
-    memcpy(ethh.dhost, gwMac, 6);
+    memcpy(ethh.dhost, dstMac, 6);
     ethh.type = htons(0x0800);
 
     memcpy(packet, &ethh, sizeof(ethh));

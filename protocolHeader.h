@@ -1,4 +1,6 @@
+#pragma once
 #include <stdint.h>
+#include <netinet/in.h> // inaddr
 
 struct etherHeader{
     uint8_t dhost[6] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
@@ -17,19 +19,6 @@ struct arpHeader{
     uint8_t dha[6] = {0,}; //00:00:00:00:00:00
     uint8_t dip[4] = {0,}; //scanning target IP
 } __attribute__ ((__packed__));
-
-struct tcpHeader{
-    uint16_t source_port;      // 송신자의 포트 번호
-    uint16_t dest_port;        // 수신자의 포트 번호
-    uint32_t sequence_number;  // 연속된 데이터 스트림에서의 순서 번호
-    uint32_t ack_number;       // 확인 응답 번호
-    uint16_t data_offset_reserved_flags;  // 데이터 오프셋 및 플래그
-    uint16_t window_size;      // 수신자 창 크기
-    uint16_t checksum;         // 헤더 및 데이터에 대한 체크섬
-    uint16_t urgent_pointer;   // 긴급 데이터의 포인터
-    // 다른 필요한 필드들을 추가할 수 있습니다.
-}__attribute__ ((__packed__));
-
 
 struct dhcpHeader{
     uint8_t op;             // 메시지 종류 (부팅 요청, 부팅 응답 등)
@@ -60,7 +49,28 @@ struct tlsClientHelloHeader{
     uint64_t handshakeRandom[4];
 } __attribute__ ((__packed__));
 
+
+struct ipPseudoHeader{
+    uint32_t sIp;
+    uint32_t dIp;
+    uint8_t reserved = 0x00;
+    uint8_t protocol;
+    uint16_t tcpLen;
+} __attribute__ ((__packed__));
+
+struct tcpPseudoHeader{
+    uint16_t source_port;      // 송신자의 포트 번호
+    uint16_t dest_port;        // 수신자의 포트 번호
+    uint32_t sequence_number;  // 연속된 데이터 스트림에서의 순서 번호
+    uint32_t ack_number;       // 확인 응답 번호
+    uint16_t data_offset_reserved_flags;  // 데이터 오프셋 및 플래그
+    uint16_t window_size;      // 수신자 창 크기
+    // 다른 필요한 필드들을 추가할 수 있습니다.
+}__attribute__ ((__packed__));
+
+
 struct arpPacket{
     struct etherHeader ether;
     struct arpHeader arp;
 } __attribute__ ((__packed__));
+
