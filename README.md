@@ -20,6 +20,7 @@ Linux 환경에서 C언어와 libpcap을 이용해 ARP Spoofing을 통해 같은
 ## 1. 사용법
 ```
 ./bin/HTTP_BLOCK [네트워크 인터페이스]
+Gateway IP : [게이트웨이 IP 4번째 옥텟]
 ```
 
 </br>
@@ -29,8 +30,6 @@ Linux 환경에서 C언어와 libpcap을 이용해 ARP Spoofing을 통해 같은
 ## 2. 예시
 
 ![example](https://github.com/nms200299/HTTP_BLOCK/assets/12112214/6bd80faa-0ded-4db6-a699-4afc8eb5963f)
-
-
 
 </br>
 
