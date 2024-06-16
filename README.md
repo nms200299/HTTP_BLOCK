@@ -66,7 +66,7 @@ Victim : Windows 10 Pro 22H2, Galaxy S21 5G (SM-G991N)
 - ./src/*.cpp : 실질적 기능을 담당하는 소스 파일 (함수)
 - ./src/protocolHeader.h : 사용하는 프로토콜 구조체에 대한 정의
 - ./src/srcLinkHeader.h : 각 소스파일에 있는 함수들의 선언
-- ./src/threadArgsHeader.h : 스레드를 생성 시, 변수 공유를 위한 구조체 정의
+- ./src/threadArgsHeader.h : 스레드 생성 시, 변수 공유를 위한 구조체 정의
 ```
 ### 4-2. 스레드 구성
 ```
@@ -76,9 +76,9 @@ Victim : Windows 10 Pro 22H2, Galaxy S21 5G (SM-G991N)
 3. 패킷 릴레이 (VICTIM ↔ GW 간 패킷 릴레이)
 
 - Sub Thread 1 (arpScan 함수)
-1. 디바이스 IP, MAC 스캐닝 (ARP Request 패킷 송신)
+디바이스 IP, MAC 스캐닝 (ARP Request 패킷 송신)
 
 - Sub Thread 2 (arpSpoofing 함수)
-1. 디바이스 ARP 테이블 오염 (ARP Reply 패킷 송신)
+디바이스 ARP 테이블 오염 (ARP Reply 패킷 송신)
 ```
 
